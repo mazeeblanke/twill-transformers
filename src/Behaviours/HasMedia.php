@@ -354,10 +354,27 @@ trait HasMedia
             'height' => $media->height,
             'title' => $media->getMetadata('title'),
             'caption' => $media->getMetadata('caption'),
-            'alt' => $media->getMetadata('altText'),
+            'alt' => $this->getMetadata($media),
             'sources' => $this->generateSources($object, $role, $crop),
             'locale' => $media->pivot->locale ?? $this->locale(),
         ];
+    }
+
+    /**
+     * return the alt text
+     *
+     * @param $media
+     * @return string
+    */
+    protected function getMetadata($media)
+    {
+        $altText = $media->getMetadata('altText');
+
+        if (isset($media->alt_text) && is_array($media->alt_text)) {
+            $altText = $altText ? $altText : $media->alt_text[locale()];
+        }
+
+        return $altText;
     }
 
     /**
@@ -396,7 +413,7 @@ trait HasMedia
             'height' => $media->height,
             'title' => $media->getMetadata('title'),
             'caption' => $media->getMetadata('caption'),
-            'alt' => $media->getMetadata('altText'),
+            'alt' => $this->getMetadata($media),
             'sources' => $sources,
         ];
     }
