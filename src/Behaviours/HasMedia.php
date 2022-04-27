@@ -371,7 +371,7 @@ trait HasMedia
         $altText = $media->getMetadata('altText');
 
         if (isset($media->alt_text) && is_array($media->alt_text)) {
-            $altText = $altText ? $altText : $media->alt_text[locale()];
+            $altText = $altText ? $altText : ($media->alt_text[$this->locale()] ?? '');
         }
 
         return $altText;
